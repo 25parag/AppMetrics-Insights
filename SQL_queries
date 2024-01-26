@@ -1,1 +1,76 @@
+-- Q1 - Identify the top 5 oldest users of this app.
+SELECT username, created_at
+FROM users
+ORDER BY created_at
+LIMIT 5;
+
+
+-- Q2 - Identify users who have not uploaded any photos on app.
+SELECT username
+FROM users
+WHERE id NOT IN (SELECT DISTINCT user_id FROM photos);
+
+-- Q3 - users with the highest number of followers
+SELECT follower_id, COUNT(followee_id) AS follower_count
+FROM follows
+GROUP BY follower_id
+ORDER BY follower_count DESC
+LIMIT 5;
+
+
+
+-- Q4 - Identify the 5 most commonly used hashtags.
+SELECT T.tag_name, COUNT(P.photo_id) AS usage_count
+FROM tags AS T
+JOIN photo_tags AS P ON T.id = P.tag_id
+GROUP BY T.id
+ORDER BY usage_count DESC
+LIMIT 5;
+
+-- Q5 - Which day of the week do most users register on?
+SELECT DAYNAME(created_at) AS registration_day, COUNT(id) AS registration_count
+FROM users
+GROUP BY registration_day
+ORDER BY registration_count DESC
+LIMIT 1;
+
+-- Q6 - Identify the number of likes on each photo.
+SELECT P.photo_id, COUNT(L.photo_id) AS like_count
+    FROM photos AS P
+    LEFT JOIN likes AS L ON P.id = L.photo_id
+    GROUP BY P.id ORDER BY like_count DESC;
+
+-- Q7 - Identify peak time for photo likes.
+SELECT HOUR(created_at) AS like_hour, COUNT(user_id) AS like_count
+FROM likes
+GROUP BY like_hour
+ORDER BY like_count DESC
+LIMIT 1;
+
+
+-- Q8 - Identify users with highest Like-To-Follower ratio.
+SELECT user_id, (COUNT(L.photo_id) / followers_count) AS like_follower_ratio
+FROM likes AS L
+JOIN (
+    SELECT followee_id, COUNT(follower_id) AS followers_count
+    FROM follows
+    GROUP BY followee_id
+) AS follower_counts ON L.user_id = follower_counts.followee_id
+GROUP BY user_id
+ORDER BY like_follower_ratio DESC
+LIMIT 5;
+
+-- Q9 - Identify tagged photos with no likes.
+SELECT P.id
+FROM photos AS P
+LEFT JOIN likes AS L ON P.id = L.photo_id
+WHERE L.photo_id IS NULL;
+
+-- Q10 - Identify user growth rate over time.
+SELECT YEAR(created_at) AS registration_year, COUNT(id) AS registration_count
+FROM users
+GROUP BY registration_year
+ORDER BY registration_year;
+
+   
 
