@@ -2,6 +2,7 @@
 
 This analysis seeks to discover valuable user information and photo data to improve users' interaction with the app platform. By understanding user behavior, the aim is to enhance marketing efforts and overall user satisfaction.
 In this database, we have records of different users' app activity, such as users with the most followers, users with the highest reactions to a post, and mostly used hashtags.
+These insights are then used by various teams across a business to launch a new marketing campaign and help the business grow.
 
 **DATASETS USED**
 * Users - This table stores information about platform users.
